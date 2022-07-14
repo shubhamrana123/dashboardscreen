@@ -1,13 +1,24 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useForm } from 'react-hook-form'
-function AddUsers() {
+function AddUsers(props) {
+    const [userData,setUserData]=useState({ 
+         id: 1,
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: 'Miri@123'})
     const { register, handleSubmit, formState: { errors } } = useForm()
  const addUserData = (data) =>{
-console.log(data);
+    setUserData(previousState => {
+        localStorage.setItem('formdata', JSON.stringify({ ...previousState, ...data }))
+      })
+      console.log(data);
+      console.log(props);
+    props.addUser(data);
  }
     return (
         <>
-            <form onSubmit={handleSubmit(addUserData())}>
+            <form onSubmit={handleSubmit(addUserData)}>
                 <label>
                     firstName:
                 </label> <br />
