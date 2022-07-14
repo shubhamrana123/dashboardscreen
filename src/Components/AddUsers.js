@@ -1,32 +1,29 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import UserList from './UserList';
 function AddUsers(props) {
-    const [userData,setUserData]=useState({ 
-         id: 1,
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: 'Miri@123'})
-    const { register, handleSubmit, formState: { errors } } = useForm()
- const addUserData = (data) =>{
-    setUserData(previousState => {
-        localStorage.setItem('formdata', JSON.stringify({ ...previousState, ...data }))
-      })
-      console.log(data);
-      console.log(props);
-    props.addUser(data);
- }
+    
+    let navigate = useNavigate();
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    
+    const addUserDataList = (data) => {
+        data.id = props.list.length + 1;
+        props.addUser(data);
+        navigate('/dashboard')
+
+    }
     return (
         <>
-            <form onSubmit={handleSubmit(addUserData)}>
+            <form onSubmit={handleSubmit(addUserDataList)}>
                 <label>
                     firstName:
                 </label> <br />
-                <input type="text" {...register('firstname', { required: true, maxLength: 10 })} />  <br />
+                <input type="text" {...register('firstName', { required: true, maxLength: 10 })} />  <br />
                 {errors.firstname && <p>Please check your FirstName</p>}
                 <label>
                     LastName:</label>    <br />
-                <input type="text" {...register('lastname', { required: true, maxLength: 10 })} /> <br />
+                <input type="text" {...register('lastName', { required: true, maxLength: 10 })} /> <br />
                 {errors.lastname && <p>Please check your LastName</p>}
                 <label>
                     Email:
@@ -47,6 +44,7 @@ function AddUsers(props) {
                 <button type="button"> Cancel</button>
 
             </form>
+            {/* <UserList list ={userData}></UserList> */}
         </>
     )
 }
